@@ -1,0 +1,30 @@
+<h1>Patient Token Dashboard</h1>
+
+<%= form_with(model: @patient, url: patients_path) do |form| %>
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :phone %>
+    <%= form.text_field :phone, :placeholder => "Your phone number" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Generate token for the patient' %>
+  </div>
+<% end %>
+
+<h2>Patients</h2>
+<ul>
+  <% @patients.each do |patient| %>
+    <li>
+      <%= "#{patient.token} : #{patient.name} : (#{patient.phone})" %>
+    </li>
+  <% end %>
+</ul>
+
+
+
+<%= link_to 'Next Token', next_token_path, method: :post %>
