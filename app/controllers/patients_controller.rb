@@ -21,20 +21,20 @@ class PatientsController < ApplicationController
   end
 
   def next_token
-    next_patient = Patient.where('token > ?', @curr_token).order(:token).first
+    next_patient = Patient.where('token > ?', @curr_token).order(:token).first 
 
     if next_patient
-      @curr_token = next_patient.token
+      
     end
     ActionCable.server.broadcast("patient_queue_channel", { token: @curr_token })
 
-    redirect_to root_path, notice: 'Current token: #{token_in_q}'
+    redirect_to root_path, notice: 'Current token: #{@curr_token}'
   end
 
   def current_token
-    current_patient = Patient.find_by(token: @curr_token) unless @curr_token.nil?
-    current_patient = Patient.first if current_patient.nil?
-    @curr_token = current_patient.token
+    current_patient = Patient.current_token.first #|| (Patient.find_by(token: @curr_token) unless @curr_token.nil?)
+    puts ">>>>>>>>>>>>>>check:#{current_patient.try(:id)}"
+    @curr_token = current_patient.try(:token)
   end
 
   private
